@@ -1,4 +1,3 @@
-package Q07;
 import java.util.Scanner;
 
 class Inversao{
@@ -14,7 +13,7 @@ class Inversao{
         return Inverter(s, pos + 1, arr);
     }
 
-    public static void main(){
+    public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         String palavra = "";
 
