@@ -25,10 +25,10 @@ public class senhaValida {
             }
         }
         
-        if(s.length() > 8 && mai && min && num && esp)
+        if(s.length() >= 8 && mai && min && num && esp)
             System.out.println("SIM");
         else    
-            System.out.println("NÃO");
+            System.out.println("NAO");
     }
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
