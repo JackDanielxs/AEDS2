@@ -60,7 +60,7 @@ public class Anagrama {
                     }
                 }
 
-                System.out.println(Verificar(s1, s2) ? "SIM" : "NÃO");
+                MyIO.println(Verificar(s1, s2) ? "SIM" : "NÃO");
             }
         }while(!fim);
         sc.close();
