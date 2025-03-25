@@ -6,4 +6,4 @@ Este repositório foi criado com o propósito de aprendizado pessoal e aprimoram
 
 O objetivo principal é fortalecer meu raciocínio lógico, aprofundar meu conhecimento e consolidar habilidades de programação. Além disso, documentar meu progresso e criar um repositório de consulta para revisões futuras.
 
-Se você também busca evoluir nessa área, sinta-se à vontade para explorar o conteúdo, testar os algoritmos e trocar ideias! 🧠
+Se você também busca evoluir nessa área, sinta-se à vontade para explorar o conteúdo e testar os algoritmos! 🧠
