@@ -25,6 +25,4 @@ Este repositório é focado no meu estudo pessoal, mas se você quiser sugerir m
 2️⃣ Criar uma Issue para relatar problemas ou sugerir novos algoritmos.
 3️⃣ Compartilhar conhecimento para ajudar a aprimorar este material.
 
-A colaboração e o compartilhamento de conhecimento são sempre bem-vindos.
-
 Se você também busca evoluir nessa área, sinta-se à vontade para explorar o conteúdo e testar os algoritmos! 🧠
