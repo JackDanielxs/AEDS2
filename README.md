@@ -11,7 +11,10 @@ O objetivo principal é fortalecer meu raciocínio lógico, aprofundar meu conhe
 
 Este repositório contém implementações de algoritmos e estruturas de dados em diferentes linguagens de programação, permitindo uma abordagem mais ampla e comparativa entre elas.
 
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg" width="50" height="50" />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg" width="100" height="100" />
+
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" width="100" height="100" />
+          
 
           
 
