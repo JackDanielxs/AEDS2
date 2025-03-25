@@ -1,4 +1,4 @@
-# 🚀 **ALGORTIMOS E ESTRUTURAS DE DADOS**  
+# 🚀 **ALGORITMOS E ESTRUTURAS DE DADOS**  
 
 
 📌 Sobre o Repositório
