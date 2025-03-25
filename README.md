@@ -1,6 +1,6 @@
 # 🚀 **ALGORITMOS E ESTRUTURAS DE DADOS**
 
-📌 Sobre o Repositório
+## **📌 Sobre o Repositório**
 
 Este repositório foi criado com o propósito de aprendizado pessoal e aprimoramento contínuo em algoritmos e estruturas de dados. Aqui, exploro conceitos fundamentais da computação através da implementação prática de algoritmos e estruturas essenciais.
 
