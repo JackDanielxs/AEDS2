@@ -17,5 +17,14 @@ Este repositório contém implementações de algoritmos e estruturas de dados e
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" width="100" height="100" />
 </div>
 
-          
+## **🤝 Como Contribuir**
+
+Este repositório é focado no meu estudo pessoal, mas se você quiser sugerir melhorias ou trocar ideias, sinta-se à vontade para:
+
+1️⃣ Abrir um Pull Request com sugestões de código.
+2️⃣ Criar uma Issue para relatar problemas ou sugerir novos algoritmos.
+3️⃣ Compartilhar conhecimento para ajudar a aprimorar este material.
+
+A colaboração e o compartilhamento de conhecimento são sempre bem-vindos.
+
 Se você também busca evoluir nessa área, sinta-se à vontade para explorar o conteúdo e testar os algoritmos! 🧠
