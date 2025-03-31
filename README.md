@@ -13,7 +13,7 @@ Este repositório contém implementações de algoritmos e estruturas de dados e
 
 <p align="center">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,kubernetes,docker,c,vim" />
+    <img src="https://skillicons.dev/icons?i=java,c,cpp,cs" />
   </a>
 </p>
 
