@@ -15,6 +15,7 @@ Este repositório contém implementações de algoritmos e estruturas de dados e
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg" width="100" height="100" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" width="100" height="100" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" width="100" height="100" />
+  (https://skillicons.dev/icons?i=js,html,css,wasm)](https://skillicons.dev)
 </div>
 
 ## **🤝 Como Contribuir**
