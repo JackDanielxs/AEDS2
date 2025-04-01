@@ -18,7 +18,7 @@ Este repositório contém implementações de algoritmos e estruturas de dados e
 
 ## ***🤝 Como Contribuir***
 
-Este repositório é focado no meu estudo pessoal, mas se você quiser sugerir melhorias ou trocar ideias, sinta-se à vontade para:
+Este repositório é focado no meu estudo acadêmico, mas se você quiser sugerir melhorias ou trocar ideias, sinta-se à vontade para:
 
 1️⃣ Abrir um Pull Request com sugestões de código.  
 2️⃣ Criar uma Issue para relatar problemas ou sugerir novos algoritmos.  
