@@ -8,7 +8,6 @@ O objetivo principal é fortalecer meu raciocínio lógico, aprofundar meu conhe
 
 ## **🖥️ Linguagens utilizadas**  
 
-
 Este repositório contém implementações de algoritmos e estruturas de dados em diferentes linguagens de programação, permitindo uma abordagem mais ampla e comparativa entre elas.
 
 <p align="center">
