@@ -125,7 +125,7 @@ public class Filme{
 
     public static void main(String[] args) {
 
-        //Start - Ler todos os filmes em CSV
+        //Ler todos os filmes em CSV
         LerFilmes();
         Scanner sc = new Scanner(System.in);
         Filme filme = new Character();
