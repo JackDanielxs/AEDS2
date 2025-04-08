@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 public class Filme{
 
     static SimpleDateFormat ddf = new SimpleDateFormat("dd-MM-yyyy");
+
+    public static final String FILE_PATH = "/tmp/disneyplus.csv";
     public static ArrayList<Filme> todosFilmes = new ArrayList<Filme>();
 
     private UUID Id;
@@ -17,10 +19,11 @@ public class Filme{
     private int Ano;
     private String Rating;
     private String Duracao;
-    private String Descricao;
+    private ArrayList<String> Listado;
 
     // Contrutor vazio
     public Filme(){
+
         this.Id = UUID.randomUUID();
         this.Tipo = "";
         this.Titulo = "";
@@ -31,12 +34,12 @@ public class Filme{
         this.Ano = 0;
         this.Rating = "";
         this.Duracao = "";
-        this.Descricao = "";
+        this.Listado = new ArrayList<String>();
     }
 
     // Construtor
     public Filme(UUID id, String tipo, String titulo, String diretor, 
-    ArrayList<String> cast, String pais, Date data, int ano, String rating, String duracao, String descricao){
+    ArrayList<String> cast, String pais, Date data, int ano, String rating, String duracao, ArrayList<String> listado){
 
         Id = id;
         Tipo = tipo;
@@ -48,7 +51,7 @@ public class Filme{
         Ano = ano;
         Rating = rating;
         Duracao = duracao;
-        Descricao = descricao;
+        Listado = listado;
     }
 
     // Gets
@@ -61,10 +64,26 @@ public class Filme{
     public int getAno() { return this.Ano; }
     public String getRating() { return this.Rating; }
     public String getDuracao() { return this.Duracao; }
-    public String getDescricao() { return this.Descricao; }
+    public String getListado() {
+
+        String list = "[";
+
+        for(int i = 0; i < this.Listado.size(); i++){
+            list = this.Listado.get(i);
+            if(i < this.Listado.size() - 1)
+                list += ", ";
+        }
+
+        list += "]";
+
+        if(list == "[]")
+            list = "[NaN]";
+
+        return list;
+    }
     public String getCast(){
         
-        String cast = "{";
+        String cast = "[";
 
         for(int i = 0; i < this.Cast.size(); i++) {
 
@@ -73,7 +92,11 @@ public class Filme{
                 cast += ", ";
         }
 
-        cast += "}";
+        cast += "]";
+
+        if(cast == "[]")
+            cast = "[NaN]";
+
         return cast;
     }
 
@@ -87,27 +110,39 @@ public class Filme{
     public void setAno(int ano) { this.Ano = ano; }
     public void setRating(String rating) { this.Rating = rating; }
     public void setDuracao(String duracao) { this.Duracao = duracao; }
-    public void setDescricao(String descricao) { this.Descricao = descricao; }
+    public void setListado(ArrayList<String> listado) { this.Listado = listado; }
     public void setCast(ArrayList<String> cast) { this.Cast = cast; }
 
     // Clone
     public Filme Clone(){
         return new Filme(this.Id, this.Tipo, this.Titulo, this.Diretor, this.Cast, 
-        this.Pais, this.Data, this.Ano, this.Rating, this.Duracao, this.Descricao);
+        this.Pais, this.Data, this.Ano, this.Rating, this.Duracao, this.Listado);
     }
 
+    //Imprimindo
+    public void print() {
+
+        System.out.println("[=> "
+            + this.getId() + " ## "
+            + this.getTitulo() + " ## "
+            + this.getTipo() + " ## "
+            + this.getDiretor() == "" ? "NaN" : this.getDiretor() + " ## "
+            + this.getCast() + " ## " //tratado no get
+            + this.getPais() == "" ? "NaN" : this.getPais() + " ## " 
+            + this.getData() == null ? "NaN" : this.getData() + " ## " 
+            + this.getAno() == 0 ? "NaN"+ : this.getAno() + " ## " 
+            + this.getRating() + " ## " 
+            + this.getDuracao() + " ## " 
+            + this.getListado() + " ##"); //tratado no get
+    }
 
     public static void LerFilmes() {
 
-        // Initialize variables
         try {
 
             FileInputStream fstream = new FileInputStream(FILE_PATH);
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
-            // ---------------------- //
-
-            // Explode CSV file
             String linha = br.readLine();
   
             while((linha = br.readLine()) != null) {
@@ -117,10 +152,19 @@ public class Filme{
                 todosFilmes.add(filme);
             }
 
-            // Fecahr CSV
+            // Fechar CSV
             fstream.close();
         }
         catch(IOException e) { e.printStackTrace(); }
+    }
+
+    public static Filme getById(UUID id, ArrayList<Filme> filmes) {
+
+        for(int i = 0; i < filmes.size(); i++) {
+
+            if(filmes.get(i).getId().equals(id)) return filmes.get(i);
+        }
+        return null;
     }
 
     public static void main(String[] args) {
@@ -128,7 +172,7 @@ public class Filme{
         //Ler todos os filmes em CSV
         LerFilmes();
         Scanner sc = new Scanner(System.in);
-        Filme filme = new Character();
+        Filme filme = new Filme();
         String linha = sc.nextLine();
 
         while(!linha.equals("FIM")) {
@@ -137,11 +181,11 @@ public class Filme{
             UUID id = UUID.fromString(linha);
 
             // buscar filme
-            filme = searchById(id, todosFilmes);
+            filme = getById(id, todosFilmes);
 
             // Printar filme
-            if(filme != null) filme.print();
-            else System.out.println("x filme não encontrado!");
+            if(filme != null) 
+                filme.print();
 
             linha = sc.nextLine();
         }
