@@ -64,6 +64,7 @@ public class Filme{
     public String getDuracao() { return this.Duracao; }
     public String getListado() {
 
+        this.Listado = OrdenarArraylist(this.Listado);
         String list = "[";
 
         for(int i = 0; i < this.Listado.size(); i++){
@@ -81,6 +82,7 @@ public class Filme{
     }
     public String getCast(){
         
+        this.Cast = OrdenarArraylist(this.Cast);
         String cast = "[";
 
         for(int i = 0; i < this.Cast.size(); i++) {
@@ -96,6 +98,22 @@ public class Filme{
             cast = "[NaN]";
 
         return cast;
+    }
+
+    // Bubble sort manual
+    public ArrayList<String> OrdenarArraylist(ArrayList<String> lista){
+
+        for (int i = 0; i < lista.size() - 1; i++) {
+            for (int j = 0; j < lista.size() - i - 1; j++) {
+                if (lista.get(j).compareTo(lista.get(j + 1)) > 0) {
+                    // Swap
+                    String temp = lista.get(j);
+                    lista.set(j, lista.get(j + 1));
+                    lista.set(j + 1, temp);
+                }
+            }
+        }
+        return lista;
     }
 
     // Sets
@@ -119,16 +137,15 @@ public class Filme{
 
     public void print() {
    
-        //se a data não for nula, formata no padrão "MMMM d, yyyy" do arquivo csv
-        //caso contrário, exibe "NaN" para indicar que não havia data
-        String dataAdicionada = (Data != null) ?
+        // Formata no padrão "Mês dia, ano" - Exibe "March 1, 1900" (default) se for nulo
+        String dataAdd = (Data != null) ?
         new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(Data) 
         : "March 1, 1900";
 
-        //converte o ano de lançamento para string para exibição
+        // Converte o ano -> string para exibição
         String anoLancamento = String.valueOf(Ano);
     
-        //impressão das imformações fomatadas
+        // Printando
         System.out.println(
             "=> " + Id +
             " ## " + (Titulo.equals("NaN") ? "NaN" : Titulo) +
@@ -136,7 +153,7 @@ public class Filme{
             " ## " + (Diretor.equals("NaN") ? "NaN" : Diretor) +
             " ## " + getCast() +
             " ## " + (Pais.equals("NaN") ? "NaN" : Pais) +
-            " ## " + dataAdicionada +
+            " ## " + dataAdd +
             " ## " + anoLancamento +
             " ## " + (Rating.equals("NaN") ? "NaN" : Rating) +
             " ## " + (Duracao.equals("NaN") ? "NaN" : Duracao) +
@@ -148,47 +165,47 @@ public class Filme{
         String[] lista = new String[11];
         int i = 0, j = 0;
     
-        while(j < 11) {  //enquanto não tiver os 11 campos preenchidos
-            String campo = "";  //variável para armazenar o valor de cada campo
-            
+        while(j < 11) {  // 11 = Quantidade de atributos de cada filme
+
+            String campo = "";
             //se o campo estiver entre aspas, processa o campo de maneira especial
             if(i < linhaCsv.length() && linhaCsv.charAt(i) == '"') {
-                i++;  //pula a primeira aspa dupla
-                
+
+                i++;  // Pula aspa dupla
                 //enquanto não encontrar a aspa final ou uma sequência de duas aspas duplas (representando uma aspa literal)
                 while(i < linhaCsv.length()) {
                     if(linhaCsv.charAt(i) == '"') {  //se encontrar uma aspa dupla
-                        //verifica se são duas aspas duplas seguidas, que devem ser tratadas como uma aspa literal
+                        // Verifica se são duas aspas duplas seguidas, que devem ser tratadas como uma aspa literal
                         if(i + 1 < linhaCsv.length() && linhaCsv.charAt(i + 1) == '"') {
-                            i += 2;  //pula as duas aspas
+                            i += 2; // Pula as duas aspas
                         }
-                        else {  //se for a aspa final, sai do loop
-                            i++;  //pula a aspa final
+                        else { // Se for aspa final, sai do loop
+                            i++; // Pula aspa final
                             break;
                         }
                     }
-                    else {  //se não for uma aspa dupla, adiciona o caractere ao campo
+                    else {  // Se não for aspa dupla, adiciona o caractere ao campo
                         campo += linhaCsv.charAt(i);
                         i++;
                     }
                 }
-                //pula a vírgula que separa os campos, se houver
+                // Pula a vírgula que separa os campos, se houver
                 if(i < linhaCsv.length() && linhaCsv.charAt(i) == ',') i++;
             }
             else {
-                //caso o campo não esteja entre aspas, vai até a vírgula ou o final da linha
+                // Vai até a vírgula ou o final da linha
                 while(i < linhaCsv.length() && linhaCsv.charAt(i) != ',') {
                     campo += linhaCsv.charAt(i);
                     i++;
                 }
-                //pula a vírgula, se houver
+                // Pula a vírgula, se houver
                 if(i < linhaCsv.length() && linhaCsv.charAt(i) == ',') i++;
             }
     
             //se o campo estiver vazio, considera como "NaN"
             if(campo.isEmpty()) campo = "NaN";
             
-            //armazena o campo no array e incrementa o índice
+            //armazena o campo no array
             lista[j] = campo;
             j++;
         }
@@ -198,51 +215,52 @@ public class Filme{
         this.Tipo = lista[1];
         this.Titulo = lista[2];
         this.Diretor = lista[3];
-        //se for "NaN", salva como "NaN", se não, quebra a string sempre que encontrar vígula seguida de espaço
+
         if(lista[4].equals("NaN")){
             ArrayList<String> list = new ArrayList<>();
             list.add("NaN");
-            this.Cast = list;
+            this.Cast = list; // Lista com único valor "NaN"
         }
         else{
-            this.Cast = new ArrayList<>(Arrays.asList(lista[4].split(", ")));
+            this.Cast = new ArrayList<>(Arrays.asList(lista[4].split(", "))); // Lista completa
         }
+
         this.Pais = lista[5];
         this.Data = safeParseDate(lista[6]); //converte em formato de data
         this.Ano = safeParseInt(lista[7]); //converte em inteiro
         this.Rating = lista[8];
         this.Duracao = lista[9];
-        //se for "NaN", salva como "NaN", se não, quebra a string sempre que encontrar vígula seguida de espaço
+
         if(lista[10].equals("NaN")){
             ArrayList<String> list = new ArrayList<>();
             list.add("NaN");
-            this.Listado = list;
+            this.Listado = list; // Lista com único valor "NaN"
         }
         else{
-            this.Listado = new ArrayList<>(Arrays.asList(lista[10].split(", ")));
+            this.Listado = new ArrayList<>(Arrays.asList(lista[10].split(", "))); // Lista completa
         }
     }
 
     private Date safeParseDate(String valor) {
         try {
-            if(valor.equals("NaN")) return null; //se data for "NaN", retorna null
+            if(valor.equals("NaN")) return null;
 
-            //se data possuir valor, converte no formato do arquivo csv
+            // Se data possuir valor, converte no formato do arquivo csv
             SimpleDateFormat formato = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
             return formato.parse(valor.trim());
         }
         catch(Exception e) {
-            return null; //em caso de excessão, retorna null
+            return null; // Em caso de excessão, retorna null
         }
     }
     
     private int safeParseInt(String valor) {
         try {
-            //converte o ano de lançamento para inteiro e usa trim() para remover espaços inesperados
+            // Converte para inteiro e usa trim() para remover espaços inesperados
             return Integer.parseInt(valor.trim());
         }
         catch(Exception e) {
-            return 0; //em caso de excessão, retorna 0
+            return 0; // Em caso de excessão, retorna 0
         }
     }
 
