@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_FILMES 1000
+#define MAX_FILMES 1400 // Maior que a quantidade de registros no CSV
 #define MAX_LINHA 1024
 
 typedef struct {
@@ -21,24 +21,6 @@ typedef struct {
 
 Filme filmes[MAX_FILMES];
 int totalFilmes = 0;
-
-// Função para substituir strings vazias por "NaN"
-void preencherNaN(char *campo) {
-    if (strlen(campo) == 0 || strcmp(campo, "\n") == 0)
-        strcpy(campo, "NaN");
-}
-
-// Função para remover aspas e limpar campo CSV
-void limparCampo(char *campo) {
-    char *src = campo, *dst = campo;
-    while (*src) {
-        if (*src != '"') {
-            *dst++ = *src;
-        }
-        src++;
-    }
-    *dst = '\0';
-}
 
 void removerAspasDuplas(char *str) {
     char *src = str, *dst = str;
@@ -94,7 +76,7 @@ void parseLinha(char *linha, Filme *f) {
     removerAspasDuplas(campos[3]); strcpy(f->diretor, strlen(campos[3]) ? campos[3] : "NaN");
     removerAspasDuplas(campos[4]); strcpy(f->cast, strlen(campos[4]) ? campos[4] : "NaN");
     removerAspasDuplas(campos[5]); strcpy(f->pais, strlen(campos[5]) ? campos[5] : "NaN");
-    removerAspasDuplas(campos[6]); strcpy(f->data, strlen(campos[6]) ? campos[6] : "NaN");
+    removerAspasDuplas(campos[6]); strcpy(f->data, strlen(campos[6]) ? campos[6] : "March 1, 1900");
     removerAspasDuplas(campos[7]); f->ano = atoi(campos[7]);
     removerAspasDuplas(campos[8]); strcpy(f->rating, strlen(campos[8]) ? campos[8] : "NaN");
     removerAspasDuplas(campos[9]); strcpy(f->duracao, strlen(campos[9]) ? campos[9] : "NaN");
@@ -142,7 +124,6 @@ void ordenarStrings(char *itens[], int n) {
         }
     }
 }
-
 
 void formatarListaOrdenada(const char *entrada, char *saida) {
     if (strcmp(entrada, "NaN") == 0) {
@@ -192,7 +173,7 @@ void printFilme(Filme *f) {
         f->diretor,
         castFormatado,
         f->pais,
-        strlen(f->data) ? f->data : "March 1, 1900",
+        f->data,
         f->ano,
         f->rating,
         f->duracao,
@@ -203,10 +184,10 @@ void printFilme(Filme *f) {
 int main() {
     char input[100];
     lerCSV("/tmp/disneyplus.csv");
-
+    
     // Primeira leitura
     fgets(input, sizeof(input), stdin);
-    input[strcspn(input, "\n")] = '\0'; // Remove o \n
+    input[strcspn(input, "\n")] = '\0'; // Remove o \n 
 
     while (strcmp(input, "FIM") != 0) {
         Filme *f = buscarFilmePorId(input);
