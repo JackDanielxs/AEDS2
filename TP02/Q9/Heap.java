@@ -7,6 +7,8 @@ class Show{
     public static final String FILE_PATH = "/tmp/disneyplus.csv";    
     public static ArrayList<Show> todosFilmes = new ArrayList<Show>();
     public static ArrayList<Show> filmesIds = new ArrayList<Show>();
+    public static int comparacoes = 0;
+    public static int movimentacoes = 0;
 
     private String Id;
     private String Tipo;
@@ -261,6 +263,98 @@ class Show{
         catch(IOException e) { }
     }
 
+    public void print() {
+   
+        // Formata no padrão "Mês dia, ano" - Exibe "March 1, 1900" (default) se for nulo
+        String dataAdd = (Data != null) ?
+        new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(Data) 
+        : "March 1, 1900";
+
+        // Converte o ano -> string para exibição
+        String anoLancamento = String.valueOf(Ano);
+    
+        // Printando
+        System.out.println(
+            "=> " + Id +
+            " ## " + (Titulo.equals("NaN") ? "NaN" : Titulo) +
+            " ## " + (Tipo.equals("NaN") ? "NaN" : Tipo) +
+            " ## " + (Diretor.equals("NaN") ? "NaN" : Diretor) +
+            " ## " + getCast() +
+            " ## " + (Pais.equals("NaN") ? "NaN" : Pais) +
+            " ## " + dataAdd +
+            " ## " + anoLancamento +
+            " ## " + (Rating.equals("NaN") ? "NaN" : Rating) +
+            " ## " + (Duracao.equals("NaN") ? "NaN" : Duracao) +
+            " ## " + getListado() + " ##"
+        );
+    }
+
+    public static void HeapDiretor() {
+        int n = Show.filmesIds.size();
+    
+        // Construir o heap (reorganizar o array)
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heaper(Show.filmesIds, n, i, comparacoes, movimentacoes);
+        }
+    
+        // Um por um extrair elementos do heap
+        for (int i = n - 1; i > 0; i--) {
+            // Move a raiz atual (maior elemento) para o final
+            Show temp = Show.filmesIds.get(0);
+            Show.filmesIds.set(0, Show.filmesIds.get(i));
+            Show.filmesIds.set(i, temp);
+            movimentacoes++;
+    
+            // Chama heaper na heap reduzida
+            heaper(Show.filmesIds, i, 0, comparacoes, movimentacoes);
+        }
+    }
+
+    private static void heaper(ArrayList<Show> lista, int n, int i, int comparacoes, int movimentacoes) {
+        int maior = i; // Inicializa maior como raiz
+        int esquerda = 2 * i + 1; // filho da esquerda
+        int direita = 2 * i + 2;  // filho da direita
+    
+        // Se filho da esquerda é maior que a raiz
+        if (esquerda < n) {
+            comparacoes++;
+            int cmpEsquerda = compararShows(lista.get(esquerda), lista.get(maior));
+            if (cmpEsquerda > 0) {
+                maior = esquerda;
+            }
+        }
+    
+        // Se filho da direita é maior que o maior até agora
+        if (direita < n) {
+            comparacoes++;
+            int cmpDireita = compararShows(lista.get(direita), lista.get(maior));
+            if (cmpDireita > 0) {
+                maior = direita;
+            }
+        }
+    
+        // Se maior não é raiz
+        if (maior != i) {
+            Show troca = lista.get(i);
+            lista.set(i, lista.get(maior));
+            lista.set(maior, troca);
+            movimentacoes++;
+    
+            // Recursivamente aplicar heaper
+            heaper(lista, n, maior, comparacoes, movimentacoes);
+        }
+    }
+
+    // Método auxiliar para comparar Shows
+    private static int compararShows(Show a, Show b) {
+        int cmpTipo = a.getDiretor().compareToIgnoreCase(b.getDiretor());
+        if (cmpTipo != 0) {
+            return cmpTipo;
+        } else {
+            return a.getTitulo().compareToIgnoreCase(b.getTitulo());
+        }
+    }
+
     public static Show getById(String id, ArrayList<Show> filmes) {
 
         for(int i = 0; i < filmes.size(); i++) {
@@ -269,23 +363,14 @@ class Show{
         return null;
     }
 
-    public static Show getByTitulo(String titulo, ArrayList<Show> filmes, int[] comparacoes) {
-
-        for(int i = 0; i < filmes.size(); i++) {
-            comparacoes[0]++;
-            if(filmes.get(i).getTitulo().equals(titulo)) return filmes.get(i);
-        }
-        return null;
-    }
-
-    public static void log(Long tempo, int comparacoes) {
-        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_sequencial.txt"))) {
-            esc.write("800712" + "\t" + tempo + "\t" + comparacoes);
+    public static void log(Long tempo) {
+        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_heapsort.txt"))) {
+            esc.write("800712" + "\t" + comparacoes + "\t" + movimentacoes + "\t" + tempo);
         } catch (IOException e) {}
     }
 }
 
-public class PesquisaSeq {
+public class Heap {
     public static void main(String[] args) {
 
         Long inicio = System.currentTimeMillis(); // Tempo ao iniciar
@@ -294,7 +379,6 @@ public class PesquisaSeq {
         show.LerFilmes();
         Scanner sc = new Scanner(System.in);
         String linha = sc.nextLine();
-        int[] comparacoes = {0};
 
         while(!linha.equals("FIM")) {
 
@@ -310,25 +394,15 @@ public class PesquisaSeq {
 
             linha = sc.nextLine();
         }
-        linha = sc.nextLine();
-        while(!linha.equals("FIM")) {
 
-            // Get titulo
-            String titulo = linha;
+        Show.HeapDiretor();
 
-            // Buscar Show
-            show = Show.getByTitulo(titulo, Show.filmesIds, comparacoes);
-
-            // Printar Show
-            if(show != null) 
-                System.out.println("SIM");
-            else
-                System.out.println("NAO");
-
-            linha = sc.nextLine();
+        for (Show s : Show.filmesIds) {
+            s.print();
         }
+
         sc.close();
         Long fim = System.currentTimeMillis(); // Tempo ao terminar
-        Show.log(fim - inicio, comparacoes[0]);
+        Show.log(fim - inicio);
     }
 }

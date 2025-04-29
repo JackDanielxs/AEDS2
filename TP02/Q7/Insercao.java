@@ -7,6 +7,8 @@ class Show{
     public static final String FILE_PATH = "/tmp/disneyplus.csv";    
     public static ArrayList<Show> todosFilmes = new ArrayList<Show>();
     public static ArrayList<Show> filmesIds = new ArrayList<Show>();
+    public static int comparacoes = 0;
+    public static int movimentacoes = 0;
 
     private String Id;
     private String Tipo;
@@ -261,6 +263,58 @@ class Show{
         catch(IOException e) { }
     }
 
+    public void print() {
+   
+        // Formata no padrão "Mês dia, ano" - Exibe "March 1, 1900" (default) se for nulo
+        String dataAdd = (Data != null) ?
+        new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(Data) 
+        : "March 1, 1900";
+
+        // Converte o ano -> string para exibição
+        String anoLancamento = String.valueOf(Ano);
+    
+        // Printando
+        System.out.println(
+            "=> " + Id +
+            " ## " + (Titulo.equals("NaN") ? "NaN" : Titulo) +
+            " ## " + (Tipo.equals("NaN") ? "NaN" : Tipo) +
+            " ## " + (Diretor.equals("NaN") ? "NaN" : Diretor) +
+            " ## " + getCast() +
+            " ## " + (Pais.equals("NaN") ? "NaN" : Pais) +
+            " ## " + dataAdd +
+            " ## " + anoLancamento +
+            " ## " + (Rating.equals("NaN") ? "NaN" : Rating) +
+            " ## " + (Duracao.equals("NaN") ? "NaN" : Duracao) +
+            " ## " + getListado() + " ##"
+        );
+    }
+
+    public static void InsertionTipo(){
+        for (int i = 1; i < Show.filmesIds.size(); i++) {
+            Show chave = Show.filmesIds.get(i);
+            int j = i - 1;
+        
+            while (j >= 0) {
+                comparacoes++;
+                Show atual = Show.filmesIds.get(j);
+        
+                int cmpTipo = atual.getTipo().compareToIgnoreCase(chave.getTipo());
+        
+                if (cmpTipo > 0 || (cmpTipo == 0 && atual.getTitulo().compareToIgnoreCase(chave.getTitulo()) > 0)) {
+                    // Se tipo de atual > tipo da chave
+                    // ou tipo igual e título de atual > título da chave
+                    Show.filmesIds.set(j + 1, atual); // move o atual para a direita
+                    movimentacoes++;
+                    j--;
+                } else {
+                    break;
+                }
+            }
+            Show.filmesIds.set(j + 1, chave); // insere a chave na posição correta
+            movimentacoes++;
+        }
+    }
+
     public static Show getById(String id, ArrayList<Show> filmes) {
 
         for(int i = 0; i < filmes.size(); i++) {
@@ -269,23 +323,14 @@ class Show{
         return null;
     }
 
-    public static Show getByTitulo(String titulo, ArrayList<Show> filmes, int[] comparacoes) {
-
-        for(int i = 0; i < filmes.size(); i++) {
-            comparacoes[0]++;
-            if(filmes.get(i).getTitulo().equals(titulo)) return filmes.get(i);
-        }
-        return null;
-    }
-
-    public static void log(Long tempo, int comparacoes) {
-        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_sequencial.txt"))) {
-            esc.write("800712" + "\t" + tempo + "\t" + comparacoes);
+    public static void log(Long tempo) {
+        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_insercao.txt"))) {
+            esc.write("800712" + "\t" + comparacoes + "\t" + movimentacoes + "\t" + tempo);
         } catch (IOException e) {}
     }
 }
 
-public class PesquisaSeq {
+public class Insercao {
     public static void main(String[] args) {
 
         Long inicio = System.currentTimeMillis(); // Tempo ao iniciar
@@ -294,7 +339,6 @@ public class PesquisaSeq {
         show.LerFilmes();
         Scanner sc = new Scanner(System.in);
         String linha = sc.nextLine();
-        int[] comparacoes = {0};
 
         while(!linha.equals("FIM")) {
 
@@ -310,25 +354,14 @@ public class PesquisaSeq {
 
             linha = sc.nextLine();
         }
-        linha = sc.nextLine();
-        while(!linha.equals("FIM")) {
+        Show.InsertionTipo();
 
-            // Get titulo
-            String titulo = linha;
-
-            // Buscar Show
-            show = Show.getByTitulo(titulo, Show.filmesIds, comparacoes);
-
-            // Printar Show
-            if(show != null) 
-                System.out.println("SIM");
-            else
-                System.out.println("NAO");
-
-            linha = sc.nextLine();
+        for (Show s : Show.filmesIds) {
+            s.print();
         }
+
         sc.close();
         Long fim = System.currentTimeMillis(); // Tempo ao terminar
-        Show.log(fim - inicio, comparacoes[0]);
+        Show.log(fim - inicio);
     }
 }

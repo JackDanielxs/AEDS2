@@ -7,6 +7,8 @@ class Show{
     public static final String FILE_PATH = "/tmp/disneyplus.csv";    
     public static ArrayList<Show> todosFilmes = new ArrayList<Show>();
     public static ArrayList<Show> filmesIds = new ArrayList<Show>();
+    public static int comparacoes = 0;
+    public static int movimentacoes = 0;
 
     private String Id;
     private String Tipo;
@@ -261,6 +263,86 @@ class Show{
         catch(IOException e) { }
     }
 
+    public void print() {
+   
+        // Formata no padrão "Mês dia, ano" - Exibe "March 1, 1900" (default) se for nulo
+        String dataAdd = (Data != null) ?
+        new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(Data) 
+        : "March 1, 1900";
+
+        // Converte o ano -> string para exibição
+        String anoLancamento = String.valueOf(Ano);
+    
+        // Printando
+        System.out.println(
+            "=> " + Id +
+            " ## " + (Titulo.equals("NaN") ? "NaN" : Titulo) +
+            " ## " + (Tipo.equals("NaN") ? "NaN" : Tipo) +
+            " ## " + (Diretor.equals("NaN") ? "NaN" : Diretor) +
+            " ## " + getCast() +
+            " ## " + (Pais.equals("NaN") ? "NaN" : Pais) +
+            " ## " + dataAdd +
+            " ## " + anoLancamento +
+            " ## " + (Rating.equals("NaN") ? "NaN" : Rating) +
+            " ## " + (Duracao.equals("NaN") ? "NaN" : Duracao) +
+            " ## " + getListado() + " ##"
+        );
+    }
+
+    public static void MergeDuracao() {
+        mergeSort(0, Show.filmesIds.size() - 1);
+    }
+
+    private static void mergeSort(int inicio, int fim) {
+        if (inicio < fim) {
+            int meio = (inicio + fim) / 2;
+            mergeSort(inicio, meio);
+            mergeSort(meio + 1, fim);
+            intercalar(inicio, meio, fim);
+        }
+    }
+
+    private static void intercalar(int inicio, int meio, int fim) {
+        ArrayList<Show> aux = new ArrayList<>();
+
+        int i = inicio;
+        int j = meio + 1;
+
+        while (i <= meio && j <= fim) {
+            comparacoes++;
+            Show showI = Show.filmesIds.get(i);
+            Show showJ = Show.filmesIds.get(j);
+
+            int cmpDuracao = showI.getDuracao().compareTo(showJ.getDuracao());
+
+            if (cmpDuracao < 0 || (cmpDuracao == 0 &&
+                showI.getTitulo().compareToIgnoreCase(showJ.getTitulo()) <= 0)) {
+                aux.add(showI);
+                i++;
+            } else {
+                aux.add(showJ);
+                j++;
+            }
+            movimentacoes++;
+        }
+
+        while (i <= meio) {
+            aux.add(Show.filmesIds.get(i));
+            i++;
+            movimentacoes++;
+        }
+
+        while (j <= fim) {
+            aux.add(Show.filmesIds.get(j));
+            j++;
+            movimentacoes++;
+        }
+
+        for (int k = 0; k < aux.size(); k++) {
+            Show.filmesIds.set(inicio + k, aux.get(k));
+        }
+    }
+
     public static Show getById(String id, ArrayList<Show> filmes) {
 
         for(int i = 0; i < filmes.size(); i++) {
@@ -269,23 +351,14 @@ class Show{
         return null;
     }
 
-    public static Show getByTitulo(String titulo, ArrayList<Show> filmes, int[] comparacoes) {
-
-        for(int i = 0; i < filmes.size(); i++) {
-            comparacoes[0]++;
-            if(filmes.get(i).getTitulo().equals(titulo)) return filmes.get(i);
-        }
-        return null;
-    }
-
-    public static void log(Long tempo, int comparacoes) {
-        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_sequencial.txt"))) {
-            esc.write("800712" + "\t" + tempo + "\t" + comparacoes);
+    public static void log(Long tempo) {
+        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_mergesort.txt"))) {
+            esc.write("800712" + "\t" + comparacoes + "\t" + movimentacoes + "\t" + tempo);
         } catch (IOException e) {}
     }
 }
 
-public class PesquisaSeq {
+public class Merge {
     public static void main(String[] args) {
 
         Long inicio = System.currentTimeMillis(); // Tempo ao iniciar
@@ -294,7 +367,6 @@ public class PesquisaSeq {
         show.LerFilmes();
         Scanner sc = new Scanner(System.in);
         String linha = sc.nextLine();
-        int[] comparacoes = {0};
 
         while(!linha.equals("FIM")) {
 
@@ -310,25 +382,15 @@ public class PesquisaSeq {
 
             linha = sc.nextLine();
         }
-        linha = sc.nextLine();
-        while(!linha.equals("FIM")) {
+        
+        Show.MergeDuracao();
 
-            // Get titulo
-            String titulo = linha;
-
-            // Buscar Show
-            show = Show.getByTitulo(titulo, Show.filmesIds, comparacoes);
-
-            // Printar Show
-            if(show != null) 
-                System.out.println("SIM");
-            else
-                System.out.println("NAO");
-
-            linha = sc.nextLine();
+        for (Show s : Show.filmesIds) {
+            s.print();
         }
+
         sc.close();
         Long fim = System.currentTimeMillis(); // Tempo ao terminar
-        Show.log(fim - inicio, comparacoes[0]);
+        Show.log(fim - inicio);
     }
 }

@@ -261,6 +261,54 @@ class Show{
         catch(IOException e) { }
     }
 
+    public void print() {
+   
+        // Formata no padrão "Mês dia, ano" - Exibe "March 1, 1900" (default) se for nulo
+        String dataAdd = (Data != null) ?
+        new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(Data) 
+        : "March 1, 1900";
+
+        // Converte o ano -> string para exibição
+        String anoLancamento = String.valueOf(Ano);
+    
+        // Printando
+        System.out.println(
+            "=> " + Id +
+            " ## " + (Titulo.equals("NaN") ? "NaN" : Titulo) +
+            " ## " + (Tipo.equals("NaN") ? "NaN" : Tipo) +
+            " ## " + (Diretor.equals("NaN") ? "NaN" : Diretor) +
+            " ## " + getCast() +
+            " ## " + (Pais.equals("NaN") ? "NaN" : Pais) +
+            " ## " + dataAdd +
+            " ## " + anoLancamento +
+            " ## " + (Rating.equals("NaN") ? "NaN" : Rating) +
+            " ## " + (Duracao.equals("NaN") ? "NaN" : Duracao) +
+            " ## " + getListado() + " ##"
+        );
+    }
+
+    public static void SelectionTitulos(){
+
+        // Selection Sort para ordenar pelo Titulo
+        for (int i = 0; i < 10; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < Show.filmesIds.size(); j++) {
+                Show showJ = Show.filmesIds.get(j);
+                Show showMin = Show.filmesIds.get(minIndex);
+                
+                if (showJ.getTitulo().compareToIgnoreCase(showMin.getTitulo()) < 0) {
+                    minIndex = j;
+                }
+            }
+            // Trocar elementos i e minIndex
+            if (minIndex != i) {
+                Show temp = Show.filmesIds.get(i);
+                Show.filmesIds.set(i, Show.filmesIds.get(minIndex));
+                Show.filmesIds.set(minIndex, temp);
+            }
+        }
+    }
+
     public static Show getById(String id, ArrayList<Show> filmes) {
 
         for(int i = 0; i < filmes.size(); i++) {
@@ -268,33 +316,16 @@ class Show{
         }
         return null;
     }
-
-    public static Show getByTitulo(String titulo, ArrayList<Show> filmes, int[] comparacoes) {
-
-        for(int i = 0; i < filmes.size(); i++) {
-            comparacoes[0]++;
-            if(filmes.get(i).getTitulo().equals(titulo)) return filmes.get(i);
-        }
-        return null;
-    }
-
-    public static void log(Long tempo, int comparacoes) {
-        try (BufferedWriter esc = new BufferedWriter(new FileWriter("800712_sequencial.txt"))) {
-            esc.write("800712" + "\t" + tempo + "\t" + comparacoes);
-        } catch (IOException e) {}
-    }
 }
 
-public class PesquisaSeq {
+public class Selecao {
     public static void main(String[] args) {
 
-        Long inicio = System.currentTimeMillis(); // Tempo ao iniciar
         Show show = new Show();
         //Ler todos os filmes em CSV
         show.LerFilmes();
         Scanner sc = new Scanner(System.in);
         String linha = sc.nextLine();
-        int[] comparacoes = {0};
 
         while(!linha.equals("FIM")) {
 
@@ -310,25 +341,14 @@ public class PesquisaSeq {
 
             linha = sc.nextLine();
         }
-        linha = sc.nextLine();
-        while(!linha.equals("FIM")) {
 
-            // Get titulo
-            String titulo = linha;
+        Show.SelectionTitulos();
 
-            // Buscar Show
-            show = Show.getByTitulo(titulo, Show.filmesIds, comparacoes);
-
-            // Printar Show
-            if(show != null) 
-                System.out.println("SIM");
-            else
-                System.out.println("NAO");
-
-            linha = sc.nextLine();
+        for (int i = 0; i < 10; i++) {
+            Show s = Show.filmesIds.get(i);
+            s.print();
         }
+
         sc.close();
-        Long fim = System.currentTimeMillis(); // Tempo ao terminar
-        Show.log(fim - inicio, comparacoes[0]);
     }
 }
