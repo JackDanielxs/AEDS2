@@ -7,7 +7,6 @@ class Show{
     public static final String FILE_PATH = "/tmp/disneyplus.csv";    
     public static ArrayList<Show> todosFilmes = new ArrayList<Show>();
     public static ArrayList<Show> filmesIds = new ArrayList<Show>();
-    public static Scanner sc = new Scanner(System.in);
 
     private String Id;
     private String Tipo;
@@ -296,48 +295,71 @@ class Show{
         return null;
     }
 
-    public static String getInfoLinha(String linha){
+    public static void inserirInicio(Show show){
+        filmesIds.add(0, show);
+    }
+    public static void inserir(Show show, int pos){
+        filmesIds.add(pos, show);
+    }
+    public static void inserirFim(Show show){
+        filmesIds.add(show);
+    }
+    public static Show removerInicio(){
+        Show removido = filmesIds.remove(0);
+        return removido;
+    }
+    public static Show remover(int pos){
+        Show removido = filmesIds.remove(pos);
+        return removido;
+    }
+    public static Show removerFim(){
+        Show removido = filmesIds.remove(filmesIds.size() - 1);
+        return removido;
+    }
+
+    public static void manipularLinha(String linha){
         String tipo = linha.substring(0, 2);
         String id = "";
         int pos = 0;
+
         if(tipo == "II"){
             id = linha.substring(3);
             Show s = getById(id, todosFilmes);
-            if(s != null) filmesIds.add(0, s);
+            if(s != null) inserirInicio(s);
         }
         else if(tipo == "I*"){
-            String[] lista = linha.split(" ");
-            pos = safeParseInt(lista[1]);
-            id = linha.substring(4);
+            String[] lista = linha.split(" "); // {"I*", "5", "s123"}
+            pos = Integer.parseInt(lista[1].trim());
+            id = lista[2];
             Show s = getById(id, todosFilmes);
-            if(s != null) filmesIds.add(pos, s);
+            if(s != null) inserir(s, pos);
         }
         else if(tipo == "IF"){
             id = linha.substring(3);
             Show s = getById(id, todosFilmes);
-            if(s != null) filmesIds.add(todosFilmes.size(), s);
+            if(s != null) inserirFim(s);
         }
         else if(tipo == "RI"){
-            Show s = filmesIds.removeFirst();
+            Show s = removerInicio();
             System.out.println("(R) " + s.getTitulo());
         }
         else if(tipo == "R*"){
-            pos = safeParseInt(linha.substring(3));
-            Show s = filmesIds.remove(pos);
+            String[] lista = linha.split(" ");
+            pos = Integer.parseInt(lista[1].trim());
+            Show s = remover(pos);
             System.out.println("(R) " + s.getTitulo());
         }
-        else if{
-            Show s = filmesIds.removeLast();
+        else if(tipo == "RF"){
+            Show s = removerFim();
             System.out.println("(R) " + s.getTitulo());
         }
         
     }
 
-    public static void manipular(int n){
-        String linha = "";
+    public static void manipular(int n, Scanner sc){
         for(int i = 0; i < n; i ++){
-            linha = sc.nextLine();
-            getInfoLinha(linha);
+            String linha = sc.nextLine();
+            manipularLinha(linha);
         }
     }
 }
@@ -346,6 +368,7 @@ public class Main {
     public static void main(String[] args) {
 
         Show show = new Show();
+        Scanner sc = new Scanner(System.in);
 
         //Ler todos os filmes em CSV
         show.LerFilmes();
@@ -368,7 +391,8 @@ public class Main {
         }
 
         int n = sc.nextInt();
-        Show.manipular(n);
+        sc.nextLine(); // Consome o \n pendente após o nextInt
+        Show.manipular(n, sc);
 
         for (Show s : Show.filmesIds) {
             s.print();
