@@ -11,8 +11,8 @@ O objetivo principal é fortalecer meu raciocínio lógico, aprofundar meu conhe
 Este repositório contém implementações de algoritmos e estruturas de dados em diferentes linguagens de programação, permitindo uma abordagem mais ampla e comparativa entre elas.
 
 <p align="center">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=java,c" />
+  <a href="https://github.com/syvixor/skills-icons">
+    <img src="https://skills.syvixor.com/api/icons?i=java,c" />
   </a>
 </p>
 
