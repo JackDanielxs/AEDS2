@@ -15,13 +15,3 @@ Este repositório contém implementações de algoritmos e estruturas de dados e
     <img src="https://skills.syvixor.com/api/icons?i=java,c" />
   </a>
 </p>
-
-## ***🤝 Como Contribuir***
-
-Este repositório é focado no meu estudo acadêmico, mas se você quiser sugerir melhorias ou trocar ideias, sinta-se à vontade para:
-
-1️⃣ Abrir um Pull Request com sugestões de código.  
-2️⃣ Criar uma Issue para relatar problemas ou sugerir novos algoritmos.  
-3️⃣ Compartilhar conhecimento para ajudar a aprimorar este material.
-
-Se você também busca evoluir nessa área, sinta-se à vontade para explorar o conteúdo e testar os algoritmos! 🧠
