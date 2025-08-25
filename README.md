@@ -1,12 +1,26 @@
-# 🚀 ***ALGORITMOS E ESTRUTURAS DE DADOS 2***
+# 📘 ***ALGORITMOS E ESTRUTURAS DE DADOS 2***
 
-## ***📌 Sobre o Repositório***
+Este repositório reúne materiais, exercícios e implementações referentes à disciplina **Algoritmos e Estruturas de Dados II**.  
+O objetivo é apoiar o aprendizado dos principais conceitos de análise de algoritmos e estruturas de dados avançadas.
 
-Este repositório foi criado com o propósito de aprendizado pessoal e aprimoramento contínuo em algoritmos e estruturas de dados. Aqui, exploro conceitos fundamentais da computação através da implementação prática de algoritmos e estruturas essenciais.
+---
 
-O objetivo principal é fortalecer meu raciocínio lógico, aprofundar meu conhecimento e consolidar habilidades de programação. Além disso, documentar meu progresso e criar um repositório de consulta para revisões futuras.
+## 📑 Conteúdo
 
-## ***🖥️ Linguagens utilizadas***
+- Somatórios e análise de algoritmos  
+- Ordenação e pesquisa em memória principal  
+- TADs lineares e flexíveis: listas, pilhas, filas  
+- Árvores e percursos  
+- Balanceamento de árvores (AVL, Rubro-Negras)  
+- Tabelas e dicionários (hashing e BSTs)  
+
+## 🎯 Objetivo
+
+- Analisar algoritmos com notações assintóticas  
+- Implementar e aplicar estruturas de dados avançadas  
+- Escolher a estrutura adequada para diferentes problemas  
+
+## 🖥️ Linguagens utilizadas
 
 Este repositório contém implementações de algoritmos e estruturas de dados em diferentes linguagens de programação, permitindo uma abordagem mais ampla e comparativa entre elas.
 
