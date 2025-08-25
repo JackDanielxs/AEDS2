@@ -1,4 +1,4 @@
-# 📘 ***ALGORITMOS E ESTRUTURAS DE DADOS 2***
+# 📘 ***ALGORITMOS E ESTRUTURAS DE DADOS II***
 
 Este repositório reúne materiais, exercícios e implementações referentes à disciplina **Algoritmos e Estruturas de Dados II**.  
 O objetivo é apoiar o aprendizado dos principais conceitos de análise de algoritmos e estruturas de dados avançadas.
